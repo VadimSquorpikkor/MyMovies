@@ -4,12 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.squareup.picasso.Picasso;
 import com.squorpikkor.app.mymovies.data.Movie;
-
 import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
@@ -43,7 +41,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder movieViewHolder, int i) {
-        //todo сделать
+        Movie movie = movies.get(i);
+        ImageView imageView = movieViewHolder.imageViewSmallPoster;
+        Picasso.get().load(movie.getPosterPath()).into(imageView);//это всё, что нужно для загрузки изображения с помощью Picasso. Кроме простоты, пикассо ещё кэширует загруженные картинки
     }
 
     @Override

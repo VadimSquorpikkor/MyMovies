@@ -21,7 +21,7 @@ public class JSONUtils {
     public static final String KEY_VOTE_AVERAGE = "vote_average";
     public static final String KEY_RELEASE_DATE = "release_date";
 
-    private static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p";
+    private static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/";
     private static final String SMALL_POSTER_SIZE = "w185";
     private static final String BIG_POSTER_SIZE = "w780";
 

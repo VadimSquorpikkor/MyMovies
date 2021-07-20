@@ -38,22 +38,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerViewPosters = findViewById(R.id.recyclerViewPosters);
+        switchSort = findViewById(R.id.switchSort);
+        textPopularity = findViewById(R.id.textViewPopularity);
+        textTopRated = findViewById(R.id.textViewTopRated);
+
         recyclerViewPosters.setLayoutManager(new GridLayoutManager(this, 3));//Для отображения сеткой
         movieAdapter = new MovieAdapter();
         recyclerViewPosters.setAdapter(movieAdapter);
-        switchSort = findViewById(R.id.switchSort);
         switchSort.setChecked(true);
         switchSort.setOnCheckedChangeListener((compoundButton, isChecked) -> setMethodOfSort(isChecked));
         switchSort.setChecked(false);
         textPopularity.setOnClickListener(view -> setPopularity());
-        textPopularity.setOnClickListener(view -> setTopRated());
+        textTopRated.setOnClickListener(view -> setTopRated());
+        movieAdapter.setOnPosterClickListener(position -> Log.e(TAG, "onPosterClick: "+position));
+        movieAdapter.setOnReachEndListener(() -> Log.e(TAG, "onReachEnd: конец списка (4 постера до конца)"));
     }
 
     private void setPopularity() {
+        setMethodOfSort(false);
         switchSort.setChecked(false);
     }
 
     private void setTopRated() {
+        setMethodOfSort(true);
         switchSort.setChecked(true);
     }
 
@@ -63,10 +70,12 @@ public class MainActivity extends AppCompatActivity {
             methodOfSort = TOP_RATED;
             textTopRated.setTextColor(getResources().getColor(R.color.teal_200));
             textPopularity.setTextColor(getResources().getColor(R.color.white));
+//            switchSort.setChecked(false);
         } else {
             methodOfSort = POPULARITY;
             textTopRated.setTextColor(getResources().getColor(R.color.white));
             textPopularity.setTextColor(getResources().getColor(R.color.teal_200));
+//            switchSort.setChecked(true);
         }
         JSONObject jsonObject = NetworkUtils.getJSONFromNetwork(methodOfSort, 1);
         ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(jsonObject);

@@ -1,9 +1,13 @@
 package com.squorpikkor.app.mymovies;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +22,7 @@ import com.squorpikkor.app.mymovies.utils.NetworkUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.squorpikkor.app.mymovies.utils.NetworkUtils.POPULARITY;
 import static com.squorpikkor.app.mymovies.utils.NetworkUtils.TOP_RATED;
@@ -31,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private Switch switchSort;
     private TextView textPopularity;
     private TextView textTopRated;
+    private MainViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         recyclerViewPosters = findViewById(R.id.recyclerViewPosters);
         switchSort = findViewById(R.id.switchSort);
@@ -50,8 +58,24 @@ public class MainActivity extends AppCompatActivity {
         switchSort.setChecked(false);
         textPopularity.setOnClickListener(view -> setPopularity());
         textTopRated.setOnClickListener(view -> setTopRated());
-        movieAdapter.setOnPosterClickListener(position -> Log.e(TAG, "onPosterClick: "+position));
+        movieAdapter.setOnPosterClickListener(new MovieAdapter.OnPosterClickListener() {
+            @Override
+            public void onPosterClick(int position) {
+                Movie movie = movieAdapter.getMovies().get(position);
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("id", movie.getId());
+                startActivity(intent);
+            }
+        });
         movieAdapter.setOnReachEndListener(() -> Log.e(TAG, "onReachEnd: конец списка (4 постера до конца)"));
+
+        LiveData<List<Movie>> moviesFromLiveData = mViewModel.getMovies();
+        moviesFromLiveData.observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                movieAdapter.setMovies(movies);
+            }
+        });
     }
 
     private void setPopularity() {
@@ -77,8 +101,17 @@ public class MainActivity extends AppCompatActivity {
             textPopularity.setTextColor(getResources().getColor(R.color.teal_200));
 //            switchSort.setChecked(true);
         }
+        downloadData(methodOfSort, 1);
+    }
+
+    private void downloadData(int methodOfSort, int page) {
         JSONObject jsonObject = NetworkUtils.getJSONFromNetwork(methodOfSort, 1);
         ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(jsonObject);
-        movieAdapter.setMovies(movies);
+        if (movies != null && !movies.isEmpty()) {
+            mViewModel.deleteAllMovies();
+            for (Movie movie : movies) {
+                mViewModel.insertMovie(movie);
+            }
+        }
     }
 }

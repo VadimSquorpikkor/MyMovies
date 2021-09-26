@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.squorpikkor.app.mymovies.adapters.MovieAdapter;
 import com.squorpikkor.app.mymovies.data.FavouriteMovie;
 import com.squorpikkor.app.mymovies.data.Movie;
 

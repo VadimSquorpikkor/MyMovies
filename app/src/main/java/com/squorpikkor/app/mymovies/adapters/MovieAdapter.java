@@ -1,4 +1,4 @@
-package com.squorpikkor.app.mymovies;
+package com.squorpikkor.app.mymovies.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+import com.squorpikkor.app.mymovies.R;
 import com.squorpikkor.app.mymovies.data.Movie;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +22,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.movies = new ArrayList<>();
     }
 
-    interface OnPosterClickListener {
+    public interface OnPosterClickListener {
         void onPosterClick(int position);
     }
 
     /**Срабатывания конца загруженных постеров (чтобы можно было догрузить следующие)*/
-    interface OnReachEndListener {
+    public interface OnReachEndListener {
         void onReachEnd();
     }
 

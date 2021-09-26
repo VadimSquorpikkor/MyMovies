@@ -76,7 +76,7 @@ public class NetworkUtils {
     private static URL buildURLToReview(int id) {
         Uri uri = Uri.parse(String.format(BASE_URL_REVIEW, id)).buildUpon()
                 .appendQueryParameter(PARAMS_API_KEY, API_KEY_4)
-                .appendQueryParameter(PARAMS_LANGUAGE, LANGUAGE_VALUE)
+//                .appendQueryParameter(PARAMS_LANGUAGE, LANGUAGE_VALUE)//нет русских коментариев, поэтому всегда пустой список. Надо проверить, может русские уже появились
                 .build();
         try {
             return new URL(uri.toString());

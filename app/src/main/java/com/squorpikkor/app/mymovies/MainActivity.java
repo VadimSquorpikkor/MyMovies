@@ -14,11 +14,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.squorpikkor.app.mymovies.adapters.MovieAdapter;
 import com.squorpikkor.app.mymovies.data.Movie;
 import com.squorpikkor.app.mymovies.utils.JSONUtils;
 import com.squorpikkor.app.mymovies.utils.NetworkUtils;
